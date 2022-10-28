@@ -1,9 +1,14 @@
 
-// y la conexión del Arduin
+// y la conexión del Arduino
 #include <Wire.h>
 #include<LiquidCrystal_I2C.h>
 //Formar el oled de dirección 34 y 16 columnas y 2 filas
 LiquidCrystal_I2C lcd(34,16,2);
+const int pinon = 2;
+const int pinoff = 3;
+const int pinled = 13;
+int estaon = HIGH;
+int estaoff = HIGH;
 
 int motor1 = 3;			// Led en el pin digital PWM 5
 int motor2 = 5;
@@ -30,6 +35,10 @@ void setup()
   lcd.setCursor(0,0);
   lcd.print("Freq:");
   
+  pinMode(pinon, INPUT);//Se tomará como entrada
+  pinMode(pinoff, INPUT);
+  pinMode(pinled, OUTPUT);//Se tomará como salida
+  
   pinMode(motor1, OUTPUT);//Se tomará como salida
   pinMode(motor2, OUTPUT);
   pinMode(motor3, OUTPUT);
@@ -55,6 +64,20 @@ void loop()
     lcd.setCursor(0,1);
     lcd.print("100hz");
   }
+  estaon = digitalRead(pinon);
+  estaoff = digitalRead(pinoff);
+   if (estaon == LOW) {
+      delay(50);
+      if (estaon == LOW ) {//doble comprobación para el encendido
+      digitalWrite(pinled, HIGH);//Se encenderá el pulsador
+      }
+   }
+    if (estaoff == LOW) {
+      delay(50);
+    if (estaoff == LOW) {
+      digitalWrite(pinled, LOW);//Se apagará el pulsador
+    }
+    }
     analogWrite(motor1,valor);//El motor tendrá equivalencias depende del valor señalado
     analogWrite(motor2,valor);
     analogWrite(motor3,valor);
@@ -66,3 +89,4 @@ void loop()
     digitalWrite(LED_BUILTIN, LOW);
     delay(1000);
 }
+  
