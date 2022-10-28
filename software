@@ -1,0 +1,68 @@
+
+// y la conexión del Arduin
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+LiquidCrystal_I2C lcd(34,16,2);
+
+int motor1 = 3;			// Led en el pin digital PWM 5
+int motor2 = 5;
+int motor3 = 6;
+int motor4 = 9;
+int motor5 = 10;
+int motor6 = 11;
+int potenciometro = A0; // potenciómetro (terminal centrall) conectado al pin analógico 0
+                        // terminales exteriores a +5 V y a GND
+int valor = 0;          // variable para almacenar el valor leído
+
+void setup()
+{
+  Serial.begin(9600);          // configuración del puerto serie a 9600 baudios
+  lcd.init(); 			//Inicio de la pantalla LCD
+  lcd.backlight();		//Prender el LED de la pantalla LCD
+   
+  lcd.setCursor(0,0);	  // El cursor se posiciona en la línea 0
+  lcd.print("UPCH - 2022");
+  lcd.setCursor(0,1); 	  // El cursor se posiciona en la línea 1
+  lcd.print("Grupo 20");
+  delay(500);
+  lcd.clear();			  // Limpiar el primer texto de la pantalla LCD
+  lcd.setCursor(0,0);
+  lcd.print("Freq:");
+  
+  pinMode(motor1, OUTPUT);//Se tomará como salida
+  pinMode(motor2, OUTPUT);
+  pinMode(motor3, OUTPUT);
+  pinMode(motor4, OUTPUT);
+  pinMode(motor5, OUTPUT);
+  pinMode(motor6, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+   
+}
+
+void loop()
+{
+  valor = analogRead(potenciometro);    // lee el pin de entrada
+  Serial.println(valor);           // imprime el valor
+  delay(100);
+  
+  if (valor>=0 && valor<512){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("30hz");
+  }
+  
+  if (valor>=512 && valor<1024){
+    lcd.setCursor(0,1);
+    lcd.print("100hz");
+  }
+    analogWrite(motor1,valor);//El motor tendrá equivalencias depende del valor señalado
+    analogWrite(motor2,valor);
+    analogWrite(motor3,valor);
+    analogWrite(motor4,valor);
+    analogWrite(motor5,valor);
+    analogWrite(motor6,valor);
+    digitalWrite(LED_BUILTIN, HIGH);//
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);
+}
