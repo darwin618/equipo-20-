@@ -1,0 +1,380 @@
+// Sección biblioteca se utilizará para la pantalla OLED
+// y la conexión del Arduino
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+
+LiquidCrystal_I2C lcd(34,16,2);
+
+const int buttonpin = 2;
+const int pinled = 4 ;
+
+int estasist = LOW;
+int estabutton;
+int lastestabutton = LOW;
+int reading;
+
+int motor1 = 3;			// Led en el pin digital PWM 5
+int motor2 = 5;
+int motor3 = 6;
+int motor4 = 9;
+int motor5 = 10;
+int motor6 = 11;
+int potenciometro = A0; // potenciómetro (terminal centrall) conectado al pin analógico 0
+                        // terminales exteriores a +5 V y a GND
+int valor = 0;          // variable para almacenar el valor leído
+unsigned long lastdebouncetime = 0;  // variable para almacenar la última vez que
+                                     // cambiamos de estado encendido a apagado o viceversa
+unsigned long debounceDelay = 50;    // tiempo para el antirebote
+
+
+
+void setup()
+
+{
+
+  Serial.begin(9600);          // configuración del puerto serie a 9600 baudios
+  lcd.init(); 			//Inicio de la pantalla LCD
+  lcd.backlight();		//Prender el LED de la pantalla LCD
+
+  lcd.setCursor(0,0);	  // El cursor se posiciona en la línea 0
+  lcd.print("UPCH - 2022");
+  lcd.setCursor(0,1); 	  // El cursor se posiciona en la línea 1
+  lcd.print("Grupo 20");
+  delay(5000);
+  
+  lcd.clear();			  // Limpiar el primer texto de la pantalla LCD
+  lcd.setCursor(0,0);
+  lcd.print("Freq:");
+
+  pinMode(buttonpin,INPUT);//Se tomará como entrada
+  digitalWrite(pinled, estasist);
+
+  pinMode(motor1, OUTPUT);//Se tomará como salida
+  pinMode(motor2, OUTPUT);
+  pinMode(motor3, OUTPUT);
+  pinMode(motor4, OUTPUT);
+  pinMode(motor5, OUTPUT);
+  pinMode(motor6, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+}
+
+
+void loop()
+
+{
+  
+  valor = analogRead(potenciometro);    // lee el pin de entrada
+  Serial.println(valor);           // imprime el valor
+  delay(100);
+
+  if (valor>=0 && valor<163){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("off");
+  }
+
+  if (hertz1 == 163){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("30 hz ");
+  }
+  
+  if (valor>= 542 && valor<1024){
+    lcd.setCursor(0,1);
+    lcd.print("100 hz");    
+  }
+  
+    analogWrite(motor1,valor/4);//El motor tendrá equivalencias depende del valor señalado
+    analogWrite(motor2,valor/4);
+    analogWrite(motor3,valor/4);
+    analogWrite(motor4,valor/4);
+    analogWrite(motor5,valor/4);
+    analogWrite(motor6,valor/4);
+   
+   bool estapulsador = debouncereadbutton();
+ 
+     if (estapulsador) {
+      Serial.println("Sistema encendido");
+      digitalWrite(pinled, estasist);//Se encenderá el pulsador
+
+     } else { 
+      Serial.println("Sistema apagado");
+      digitalWrite(pinled, estasist);
+
+    lastestabutton = reading;
+  }
+}
+  
+  
+int debouncereadbutton(){
+  
+  reading = digitalRead(buttonpin);
+
+  if (reading != lastestabutton) {
+    
+    lastdebouncetime = millis();
+  }
+
+  if ((millis() - lastdebouncetime) > debounceDelay) {
+    
+    if (reading != estabutton) {
+      estabutton = reading;
+
+      if (estabutton == LOW) {
+        estasist = !estasist;
+      }
+    }
+  }
+  return estasist;
+
+}
+ 
+SEGUNDA VERSION DE CODIGO
+// Sección biblioteca se utilizará para la pantalla OLED
+// y la conexión del Arduino
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+// Sección biblioteca se utilizará para la pantalla OLED
+// y la conexión del Arduino
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+// Sección biblioteca se utilizará para la pantalla OLED
+// y la conexión del Arduino
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+
+LiquidCrystal_I2C lcd(34,16,2);
+
+const int buttonpin = 2;
+const int pinled = 4 ;
+
+int estasist = LOW;
+int estabutton;
+int lastestabutton = LOW;
+int reading;
+
+int motor1 = 3;			// Led en el pin digital PWM 5
+int motor2 = 5;
+int motor3 = 6;
+int motor4 = 9;
+int motor5 = 10;
+int motor6 = 11;
+int potenciometro = A0; // potenciómetro (terminal centrall) conectado al pin analógico 0
+                        // terminales exteriores a +5 V y a GND
+int valor = 0;          // variable para almacenar el valor leído
+unsigned long lastdebouncetime = 0;  // variable para almacenar la última vez que
+                                     // cambiamos de estado encendido a apagado o viceversa
+unsigned long debounceDelay = 50;    // tiempo para el antirebote
+
+
+
+void setup()
+
+{
+
+  Serial.begin(9600);          // configuración del puerto serie a 9600 baudios
+  lcd.init(); 			//Inicio de la pantalla LCD
+  lcd.backlight();		//Prender el LED de la pantalla LCD
+
+  lcd.setCursor(0,0);	  // El cursor se posiciona en la línea 0
+  lcd.print("UPCH - 2022");
+  lcd.setCursor(0,1); 	  // El cursor se posiciona en la línea 1
+  lcd.print("Grupo 20");
+  delay(5000);
+  
+  lcd.clear();			  // Limpiar el primer texto de la pantalla LCD
+  lcd.setCursor(0,0);
+  lcd.print("Freq:");
+
+  pinMode(buttonpin,INPUT);//Se tomará como entrada
+  digitalWrite(pinled, estasist);
+
+  pinMode(motor1, OUTPUT);//Se tomará como salida
+  pinMode(motor2, OUTPUT);
+  pinMode(motor3, OUTPUT);
+  pinMode(motor4, OUTPUT);
+  pinMode(motor5, OUTPUT);
+  pinMode(motor6, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+}
+
+
+void loop()
+
+{
+  
+  valor = analogRead(potenciometro);    // lee el pin de entrada
+  Serial.println(valor);           // imprime el valor
+  delay(100);
+
+  if (valor>=0 && valor<163){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("off                               ");
+  }    
+
+  if (valor>=163 && valor<542){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("30 hz ");
+  }
+  
+  if (valor>=542 && valor<1024){
+    lcd.setCursor(0,1);
+    lcd.print("100 hz");
+  }
+
+    analogWrite(motor1,valor/4);//El motor tendrá equivalencias depende del valor señalado
+    analogWrite(motor2,valor/4);
+    analogWrite(motor3,valor/4);
+    analogWrite(motor4,valor/4);
+    analogWrite(motor5,valor/4);
+    analogWrite(motor6,valor/4);
+
+    digitalWrite(LED_BUILTIN, HIGH);//
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);
+   
+   bool estapulsador = debouncereadbutton();
+ 
+     if (estapulsador) {
+      Serial.println("Sistema encendido");
+      digitalWrite(pinled, estasist);//Se encenderá el pulsador
+
+     } else { 
+      Serial.println("Sistema apagado");
+      digitalWrite(pinled, estasist);
+
+    lastestabutton = reading;
+  }
+}
+  
+  
+int debouncereadbutton(){
+  
+  reading = digitalRead(buttonpin);
+
+  if (reading != lastestabutton) {
+    
+    lastdebouncetime = millis();
+  }
+
+  if ((millis() - lastdebouncetime) > debounceDelay) {
+    
+    if (reading != estabutton) {
+      estabutton = reading;
+
+      if (estabutton == LOW) {
+        estasist = !estasist;
+      }
+    }
+  }
+  return estasist;
+
+}
+ 
+TERCERA VERSION DE CODIGO
+// Sección biblioteca se utilizará para la pantalla OLED
+// y la conexión del Arduino
+#include <Wire.h>
+#include<LiquidCrystal_I2C.h>
+//Formar el oled de dirección 34 y 16 columnas y 2 filas
+
+LiquidCrystal_I2C lcd(34,16,2);
+
+
+int estasist = LOW;
+int estabutton;
+int lastestabutton = LOW;
+int reading;
+
+int motor1 = 3;			// Led en el pin digital PWM 5
+int motor2 = 5;
+int motor3 = 6;
+int motor4 = 9;
+int motor5 = 10;
+int motor6 = 11;
+int potenciometro = A0; // potenciómetro (terminal centrall) conectado al pin analógico 0
+                        // terminales exteriores a +5 V y a GND
+int valor = 0;          // variable para almacenar el valor leído
+unsigned long lastdebouncetime = 0;  // variable para almacenar la última vez que
+                                     // cambiamos de estado encendido a apagado o viceversa
+unsigned long debounceDelay = 50;    // tiempo para el antirebote
+
+
+
+void setup()
+
+{
+
+  Serial.begin(9600);          // configuración del puerto serie a 9600 baudios
+  lcd.init(); 			//Inicio de la pantalla LCD
+  lcd.backlight();		//Prender el LED de la pantalla LCD
+
+  lcd.setCursor(0,0);	  // El cursor se posiciona en la línea 0
+  lcd.print("UPCH - 2022");
+  lcd.setCursor(0,1); 	  // El cursor se posiciona en la línea 1
+  lcd.print("Grupo 20");
+  delay(5000);
+  
+  lcd.clear();			  // Limpiar el primer texto de la pantalla LCD
+  lcd.setCursor(0,0);
+  lcd.print("Freq:");
+
+
+  pinMode(motor1, OUTPUT);//Se tomará como salida
+  pinMode(motor2, OUTPUT);
+  pinMode(motor3, OUTPUT);
+  pinMode(motor4, OUTPUT);
+  pinMode(motor5, OUTPUT);
+  pinMode(motor6, OUTPUT);
+
+}
+
+
+void loop()
+
+{
+  
+  valor = analogRead(potenciometro);    // lee el pin de entrada
+  Serial.println(valor);           // imprime el valor
+  delay(100);
+
+  if (valor>=0 && valor<163){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("off                          ");
+  }    
+
+  if (valor>=163 && valor<542){// El valor cambiará los hz con el motor
+    lcd.setCursor(0,1);
+  	lcd.print("30 hz                        ");
+    analogWrite(motor1,64);//El motor tendrá el valor correspondiente calculado para 30hz
+    analogWrite(motor3,64);
+    analogWrite(motor4,64);
+    analogWrite(motor5,64);
+    analogWrite(motor6,64);
+  }
+  
+  if (valor>=542 && valor<1024){
+    lcd.setCursor(0,1);
+    lcd.print("100 hz                       ");
+    analogWrite(motor1,213);//El motor tendrá el valor correspondiente calculado para 100hz
+    analogWrite(motor2,213);
+    analogWrite(motor3,213);
+    analogWrite(motor4,213);
+    analogWrite(motor5,213);
+    analogWrite(motor6,213);
+  }
+
+   
+
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(1000);
+   
+  
+}
